@@ -8,7 +8,7 @@ SCREEN_WIDTH, SCREEN_HEIGHT = 1200, 700
 FONT_PATH = "assets/Pixeltype.ttf"
 FONT_SIZE = 50
 SKY_IMAGE = "assets/sky.png"
-GROUND_IMAGE_1 = "assets/ground.png"
+GROUND_IMAGE = "assets/ground.png"
 PLAYER_IMAGE = "assets/cannon.png"
 OBSTACLE_IMAGE = "assets/orca.png"
 BULLET_IMAGE = "assets/ball.png"
@@ -60,11 +60,10 @@ class Bullets(pygame.sprite.Sprite):
 class Ground(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.image.load(GROUND_IMAGE_1).convert_alpha()
+        self.image = pygame.image.load(GROUND_IMAGE).convert_alpha()
         self.rect = self.image.get_rect(topleft =(0, 600))
 
-
-#Sky and Ground surfaces
+#Sky surface
 sky_surf = pygame.image.load(SKY_IMAGE).convert_alpha()
 sky_rect = sky_surf.get_rect(topleft =(0,0))
 
@@ -136,6 +135,7 @@ async def main():
                 if event.type == obstacle_spawn:
                     obstacle_group.add(Obstacles())
             else: 
+                # Start or Restart Game
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
                         
                         miss_count = 0
@@ -145,19 +145,14 @@ async def main():
                         obstacle_group.empty()
                         game_time = 0
                         pygame.time.set_timer(obstacle_spawn, spawn_delay)
-                        
                         game_active = True
                         
-
         if game_active:
-            # Increase spawn rate
-            print(spawn_delay)
-            
+            # Increasing spawn rate
             game_time += clock.get_time()
-
-            if game_time >= 4400:  # Adjust this interval as needed
-                game_time = 0  # Reset game time
-                spawn_delay = max(500, spawn_delay - 100)  # Decrease delay, but don't go below 200ms
+            if game_time >= 4400:
+                game_time = 0 
+                spawn_delay = max(500, spawn_delay - 100)
                 pygame.time.set_timer(obstacle_spawn, spawn_delay)
 
             # Check for collisions between bullets and obstacles
@@ -184,40 +179,36 @@ async def main():
             screen.blit(score_surf, score_rect_2)
             screen.blit(miss_surf, miss_rect)
             
-
-            # Draw and update player, bullet
-            
+            # Draw and update player, bullet, obstacles          
             obstacle_group.draw(screen)
             bullet_group.draw(screen)
             player.draw(screen)
-
             obstacle_group.update()
             bullet_group.update()
             player.update()
-
 
             #Game Over logic
             if miss_count == 5:
                 game_active = False
 
         else:
-            
             screen.blit(sky_surf, (0, 0))
             ground.draw(screen)
-            #Score
+
+            #Show score
             score_surf = font1.render(f"Your Score: {score}   High Score: 100", True, 'Purple')
             score_rect_1 = score_surf.get_rect(center=(600, 270))
-            #Game start
+
+            #Game Start Screen
             if miss_count == 0:
-                # screen.blit(game_start_surf, game_start_rect)
                 screen.blit( game_direction_surf,game_direction_rect)
-            #Restart Game
+
+            #Restart Game Screen
             if miss_count >= 5:
                 screen.blit(game_over_surf_1,game_over_rect_1)
                 screen.blit(score_surf, score_rect_1)
                 screen.blit( game_direction_surf,game_direction_rect)
                 
-
         pygame.display.update()
         clock.tick(60)
         await asyncio.sleep(0)
