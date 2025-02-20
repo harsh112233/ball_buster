@@ -2,7 +2,7 @@ import pygame
 from random import randint
 
 #Constants
-SCREEN_WIDTH, SCREEN_HEIGHT = 1200, 700
+SCREEN_WIDTH, SCREEN_HEIGHT = 1200, 800
 FONT_PATH = "font/Pixeltype.ttf"
 FONT_SIZE = 50
 SKY_IMAGE = "Resources/image/sky2.png"
@@ -22,7 +22,7 @@ font1 = pygame.font.Font(FONT_PATH, FONT_SIZE)
 sky_surf = pygame.image.load(SKY_IMAGE).convert_alpha()
 sky_rect = sky_surf.get_rect(topleft =(0,0) )
 ground_surf = pygame.image.load('Resources/image/ground.png').convert_alpha()
-ground_rect = ground_surf.get_rect(topleft =(0, 550))
+ground_rect = ground_surf.get_rect(topleft =(0, 675))
 
 running = True
 
