@@ -1,3 +1,0 @@
-Next up: 
-1. create game states : 1. welcome screen 2. game active 3. Game Over
-2. Beautify the game even more. 
